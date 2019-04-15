@@ -143,7 +143,7 @@ class ApiController extends Controller
         var_dump($_REQUEST);
     } 
 
-     public function actionCreatereceipt()
+    public function actionCreatereceipt()
     {
         $this->_checkAuth();
 
@@ -152,15 +152,16 @@ class ApiController extends Controller
         
         
          $pro = Product::model()->find('barcode = "'.$_POST['barcode'].'"');
+       
          if(!empty($pro)){
-            $model->rid = "15042019041812";
+            $model->rid = 0;
             $model->product_id = $pro->id; 
             $model->product_total = $pro->cost;
             $model->product_discount =  0;
             $model->vat = $pro->vat_class;
             $model->total_price = ($pro->cost + (($pro->cost * $pro->vat_class) / 100));
          }else{
-             $this->_sendResponse(500, sprintf('product not found', '', 'Receipt') );
+             $this->_sendResponse(500, sprintf('Data not found', '', 'Receipt') );
          }       
 
       
@@ -188,7 +189,60 @@ class ApiController extends Controller
         var_dump($_REQUEST);
     } 
    
+    public function actionFinalreceipt()
+    {
+        $this->_checkAuth();
+        
+        $pro = Receipt::model()->findAll('rid = 0');
+        $ridno = rand(1,5);
+        $i = 1;
+        if(!empty($pro)){
+            $total_price = 0;
+            $total_disc = 0;
+            $total  = 0;
+             $data = "<table border=1><tr><th colspan='5'>Receipt No : ONECLICK".$ridno."</th></tr><tr><th>product name</th><th>Price</th><th>discount</th><th>vat</th><th>Total Price</th></tr>";
+            foreach ($pro as $key => $value) {
+                $prod = Product::model()->find('id = '.$value->product_id);
 
+                if($i == 3){
+                    $value->product_discount = $value->product_total;
+                    $value->save();
+                }
+
+                if(!empty($prod)){
+                    $total_price = $value->total_price + $total_price;
+                    $total_disc = $value->product_discount + $total_disc;
+                    $total = ($total_price - $total_disc);
+                    $data .= "<tr><td>".$prod->name."</td>
+                             <td>".$value->product_total."</td>
+                              <td>".$value->product_discount."</td>
+                               <td>".$value->vat."</td>
+                               <td>".$value->total_price."</td></tr>";
+                }
+
+                # code...
+                $i++;
+                $value->rid = $ridno;
+                $value->save();
+            }
+               $data .=" <tr>
+                        <td colspan='4'>Total Price</td>
+                        <td>".$total_price."</td>
+                      </tr> <tr>
+                        <td colspan='4'>Total discount</td>
+                        <td>".$total_disc."</td>
+                      </tr> <tr>
+                        <td colspan='4'>Total </td>
+                        <td>".$total."</td>
+                      </tr></table>";
+            $this->_sendResponse(200, $data );
+         }else{
+             $this->_sendResponse(500, sprintf('Data not found', '', 'Receipt') );
+         }       
+
+        var_dump($_REQUEST);
+    } 
+   
 
 
     private function _sendResponse($status = 200, $body = '', $content_type = 'text/html')
@@ -204,7 +258,7 @@ class ApiController extends Controller
         if($body != '')
         {
             // send the body
-            echo $body;
+            echo json_encode(array('HTTP_CODE' => 200, 'DATA'=>$body));
             exit;
         }
         // we need to create the body if none is passed
@@ -256,6 +310,29 @@ class ApiController extends Controller
     } 
 
 
+    public function actionRemovereceiptpro()
+    {
+        $this->_checkAuth();
+        $put_vars = json_decode(file_get_contents('php://input'));
+        
+         $pro = Receipt::model()->find('product_id = "'.$put_vars->productId.'" AND rid=0');
+       
+               
+
+        if(empty($pro)){
+            $this->_sendResponse(500, sprintf("Error: Couldn't delete model <b>%s</b> withs ID <b>%s</b>.","receipt",$put_vars->productId) );
+            exit;
+        }
+        $num = $pro->delete();
+        if($num>0){
+                  $this->_sendResponse(200, sprintf("Model <b>%s</b> with ID <b>%s</b> has been deleted.",'receipt', $pro->id) );
+        }else{
+            $this->_sendResponse(500, sprintf("Error: Couldn't delete model <b>%s</b> with ID <b>%s</b>.","receipt",0) );
+        }
+        
+       
+    } 
+   
 
 
     private function _getStatusCodeMessage($status)

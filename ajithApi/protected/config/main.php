@@ -53,6 +53,8 @@ return array(
                         // REST patterns
                         array('api/create', 'pattern'=>'api/pro/<model:\w+>', 'verb'=>'POST'), // Create
                         array('api/createreceipt', 'pattern'=>'api/receipt/create', 'verb'=>'POST'), // Create
+                        array('api/finalreceipt', 'pattern'=>'api/receipt/final', 'verb'=>'GET'), // Create
+                        array('api/removereceiptpro', 'pattern'=>'api/receipt/remove/product', 'verb'=>'DELETE'), // Create
                         array('api/updatelastproduct', 'pattern'=>'api/receipt/updatelast', 'verb'=>'PUT'), // Create
                         array('api/list', 'pattern'=>'api/<model:\w+>', 'verb'=>'GET'),
                       
