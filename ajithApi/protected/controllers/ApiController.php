@@ -115,7 +115,53 @@ class ApiController extends Controller
 
         var_dump($_REQUEST);
     } 
+
+     public function actionCreatereceipt()
+    {
+        $this->_checkAuth();
+
+       
+        $model = new Receipt;                    
+        
+        
+         $pro = Product::model()->find('barcode = "'.$_POST['barcode'].'"');
+         if(!empty($pro)){
+            $model->rid = "15042019041812";
+            $model->product_id = $pro->id; 
+            $model->product_total = $pro->cost;
+            $model->product_discount =  0;
+            $model->vat = $pro->vat_class;
+            $model->total_price = ($pro->cost + (($pro->cost * $pro->vat_class) / 100));
+         }else{
+             $this->_sendResponse(500, sprintf('product not found', '', 'Receipt') );
+         }       
+
+      
+        // Try to save the model
+        if($model->save()) {
+            // Saving was OK
+            $this->_sendResponse(200, $this->_getObjectEncoded('receipt', $model->attributes) );
+        } else {
+            // Errors occurred
+            $msg = "<h1>Error</h1>";
+            $msg .= sprintf("Couldn't create model <b>%s</b>", 'Receipt');
+            $msg .= "<ul>";
+            foreach($model->errors as $attribute=>$attr_errors) {
+                $msg .= "<li>Attribute: $attribute</li>";
+                $msg .= "<ul>";
+                foreach($attr_errors as $attr_error) {
+                    $msg .= "<li>$attr_error</li>";
+                }        
+                $msg .= "</ul>";
+            }
+            $msg .= "</ul>";
+            $this->_sendResponse(500, $msg );
+        }
+
+        var_dump($_REQUEST);
+    } 
    
+
 
 
     private function _sendResponse($status = 200, $body = '', $content_type = 'text/html')
@@ -256,6 +302,30 @@ class ApiController extends Controller
         } else if(!$user->validatePassword($password)) {
             // Error: Unauthorized
             $this->_sendResponse(401, 'Error: User Password is invalid');
+        }
+    } 
+
+    private function _getObjectEncoded($model, $array)
+    {
+        if(isset($_GET['format']))
+            $this->format = $_GET['format'];
+
+        if($this->format=='json')
+        {
+            return CJSON::encode($array);
+        }
+        elseif($this->format=='xml')
+        {
+            $result = '<?xml version="1.0">';
+            $result .= "\n<$model>\n";
+            foreach($array as $key=>$value)
+                $result .= "    <$key>".utf8_encode($value)."</$key>\n"; 
+            $result .= '</'.$model.'>';
+            return $result;
+        }
+        else
+        {
+            return;
         }
     } 
 }
