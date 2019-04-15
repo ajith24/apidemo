@@ -65,6 +65,33 @@ class ApiController extends Controller
         }
     } 
 
+    public function actionUpdatelastproduct()
+    {
+        $this->_checkAuth();
+        $put_vars = json_decode(file_get_contents('php://input'));
+        //print_r($put_vars); die;
+        $criteria=new CDbCriteria;
+        $criteria->compare('rid',$put_vars->id);
+        $criteria->order='id DESC';
+        if(!isset($put_vars->id))
+            $this->_sendResponse(500, 'Error: Parameter <b>id</b> is missing' );
+
+        if($put_vars->id)
+        {
+            $model = Receipt::model()->find($criteria);
+            $model->product_total = $put_vars->price;
+            $model->total_price = ($put_vars->price + (($put_vars->price) * $model->vat) / 100);
+            $model->save();
+              
+        }
+        
+        if(is_null($model)) {
+            $this->_sendResponse(404, 'No Item found with id '. $put_vars->id);
+        } else {
+            $this->_sendResponse(200, $this->_getObjectEncoded('receipt', $model->attributes));
+        }
+    } 
+
 
 
     public function actionCreate()

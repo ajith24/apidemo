@@ -6,8 +6,8 @@ class Product extends CActiveRecord
 	 * The followings are the available columns in table 'product':
 	 * @var integer $id
 	 * @var string $name
-	 * @var string $cost
-	 * @var string $vat_class
+	 * @var integer $cost
+	 * @var integer $vat_class
 	 * @var integer $barcode
 	 * @var integer $created_at
 	 * @var integer $updated_at

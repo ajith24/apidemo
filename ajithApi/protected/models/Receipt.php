@@ -6,9 +6,9 @@ class Receipt extends CActiveRecord
 	 * The followings are the available columns in table 'product':
 	 * @var integer $id
 	 * @var integer $rid
-	 * @var string $product_id
-	 * @var string $product_total
-	 * @var string $product_discount
+	 * @var integer $product_id
+	 * @var integer $product_total
+	 * @var integer $product_discount
 	 * @var integer $vat
 	 * @var integer $total_price
 	 * @var integer $created_at

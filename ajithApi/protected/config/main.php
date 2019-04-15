@@ -51,8 +51,9 @@ return array(
                         'post/<id:\d+>/<title:.*?>'=>'post/view',
                         'posts/<tag:.*?>'=>'post/index',
                         // REST patterns
-                            array('api/create', 'pattern'=>'api/pro/<model:\w+>', 'verb'=>'POST'), // Create
+                        array('api/create', 'pattern'=>'api/pro/<model:\w+>', 'verb'=>'POST'), // Create
                         array('api/createreceipt', 'pattern'=>'api/receipt/create', 'verb'=>'POST'), // Create
+                        array('api/updatelastproduct', 'pattern'=>'api/receipt/updatelast', 'verb'=>'PUT'), // Create
                         array('api/list', 'pattern'=>'api/<model:\w+>', 'verb'=>'GET'),
                       
                         array('api/view', 'pattern'=>'api/<model:\w+>/<id:\d+>', 'verb'=>'GET'),
