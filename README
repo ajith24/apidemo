@@ -63,6 +63,10 @@ and join discussions with other Yii users.
 The Yii Developer Team
 http://www.yiiframework.com
 
+MySql Query File /ajithapi/protected/data/schema.mysql.sql
+
+Set Param hostname(config->params.php)
+
 
 API Details:
 ------------
@@ -145,8 +149,8 @@ Update Last Product:
 
 Delete Receipt Product:
 -----------------------
-                    DELETE /ajith/apidemo/ajithApi/index.php/api/receipt/remove/product? HTTP/1.1
-                    Host: localhost
+                    DELETE /index.php/api/receipt/remove/product? HTTP/1.1
+                    Host: youwebsite
                     username: demo
                     userpassword: demo
                     Content-Type: application/json
@@ -156,5 +160,14 @@ Delete Receipt Product:
                       "productId" : 2 
                     }------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
+API to get receipt Pdf:
+-----------------------
+                        GET /index.php/api/receipt/pdf?rid=1 HTTP/1.1
+                        Host: youwebsite
+                        username: demo
+                        userpassword: demo
+                        Content-Type: application/json
+                        cache-control: no-cache
+                        Postman-Token: 24a90353-f77f-4229-9776-1ed6419836c7
 
-MySql Query File /ajithapi/protected/data/schema.mysql.sql
+

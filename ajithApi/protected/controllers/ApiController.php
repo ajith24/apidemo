@@ -332,8 +332,62 @@ class ApiController extends Controller
         
        
     } 
-   
 
+    public function actionCreatepdf(){
+         require('phpToPDF.php');
+
+        $this->_checkAuth();
+            $data = "";
+            $pro = Receipt::model()->findAll('rid = '.$_GET['rid']);
+            $i = 1;
+            if(!empty($pro)){
+                $total_price = 0;
+                $total_disc = 0;
+                $total  = 0;
+                 
+                foreach ($pro as $key => $value) {
+                    $prod = Product::model()->find('id = '.$value->product_id);
+
+                    if(!empty($prod)){
+                        $total_price = $value->total_price + $total_price;
+                        $total_disc = $value->product_discount + $total_disc;
+                        $total = ($total_price - $total_disc);
+                        $data .= "<tr><td>".$prod->name."</td>
+                                 <td>".$value->product_total."</td>
+                                  <td>".$value->product_discount."</td>
+                                   <td>".$value->vat."</td>
+                                   <td>".$value->total_price."</td></tr>";
+                    }
+
+                    # code...
+                    $i++;
+                    $ridno = $value->rid;
+                }
+                $data = "<table border=1><tr><th colspan='5'>Receipt No : ONECLICK".$ridno."</th></tr><tr><th>product name</th><th>Price</th><th>discount</th><th>vat</th><th>Total Price</th></tr>".$data;
+                   $data .=" <tr>
+                            <td colspan='4'>Total Price</td>
+                            <td>".$total_price."</td>
+                          </tr> <tr>
+                            <td colspan='4'>Total discount</td>
+                            <td>".$total_disc."</td>
+                          </tr> <tr>
+                            <td colspan='4'>Total </td>
+                            <td>".$total."</td>
+                          </tr></table>";
+                 $pdf_options = array(
+                      "source_type" => 'html',
+                      "source" => $data,
+                      "action" => 'save',
+                      //"save_directory" => "data",
+                      "file_name"=>'ONECLICK'.$ridno.'.pdf');
+                      phptopdf($pdf_options);
+                $retur = array("ReceiptLink" => Yii::app()->params['hostname'].$pdf_options['file_name']);
+                $this->_sendResponse(200, $retur );
+             }else{
+                 $this->_sendResponse(500, sprintf('Not able to create PDF', '', 'Receipt') );
+             }       
+   
+     }
 
     private function _getStatusCodeMessage($status)
     {

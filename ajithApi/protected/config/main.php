@@ -55,6 +55,7 @@ return array(
                         array('api/createreceipt', 'pattern'=>'api/receipt/create', 'verb'=>'POST'), // Create
                         array('api/finalreceipt', 'pattern'=>'api/receipt/final', 'verb'=>'GET'), // Create
                         array('api/removereceiptpro', 'pattern'=>'api/receipt/remove/product', 'verb'=>'DELETE'), // Create
+                        array('api/createpdf', 'pattern'=>'api/receipt/pdf', 'verb'=>'GET'), // Create
                         array('api/updatelastproduct', 'pattern'=>'api/receipt/updatelast', 'verb'=>'PUT'), // Create
                         array('api/list', 'pattern'=>'api/<model:\w+>', 'verb'=>'GET'),
                       
@@ -64,6 +65,7 @@ return array(
                         '<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
         	),
         ),
+      
 		'log'=>array(
 			'class'=>'CLogRouter',
 			'routes'=>array(
