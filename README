@@ -103,3 +103,55 @@ List Product:
               userpassword: demo
               cache-control: no-cache
               Postman-Token: 2915bcd0-8207-4a21-bda6-dfb968c959cf
+
+
+Create Receipt:
+---------------
+                POST /index.php/api/receipt/create HTTP/1.1
+                Host: youwebsite
+                username: demo
+                userpassword: demo
+                Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+                cache-control: no-cache
+                Postman-Token: 0da7439a-2f87-44e8-9492-5860b6aad828
+
+                Content-Disposition: form-data; name="barcode"
+
+                234234
+                ------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+
+Final Receipt:
+---------------
+                GET /index.php/api/receipt/final? HTTP/1.1
+                Host: youwebsite
+                username: demo
+                userpassword: demo
+                Content-Type: application/json
+                cache-control: no-cache
+                Postman-Token: 0f2e33cb-664e-46d2-82bd-368a773091ba
+
+
+Update Last Product:
+--------------------
+                    PUT /index.php/api/receipt/updatelast HTTP/1.1
+                    Host: youwebsite
+                    username: demo
+                    userpassword: demo
+                    Content-Type: application/json
+                    cache-control: no-cache
+                    Postman-Token: 6760b53f-ea87-4d61-8473-1018b2011bbc
+                    
+
+Delete Receipt Product:
+-----------------------
+                    DELETE /ajith/apidemo/ajithApi/index.php/api/receipt/remove/product? HTTP/1.1
+                    Host: localhost
+                    username: demo
+                    userpassword: demo
+                    Content-Type: application/json
+                    cache-control: no-cache
+                    Postman-Token: ccf41027-d8f3-460b-8170-81c785a57335
+                    {
+                      "productId" : 2 
+                    }------WebKitFormBoundary7MA4YWxkTrZu0gW--

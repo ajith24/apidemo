@@ -258,7 +258,7 @@ class ApiController extends Controller
         if($body != '')
         {
             // send the body
-            echo $body;
+            echo json_encode(array('HTTP_CODE' => 200, 'DATA'=>$body));
             exit;
         }
         // we need to create the body if none is passed
@@ -310,6 +310,29 @@ class ApiController extends Controller
     } 
 
 
+    public function actionRemovereceiptpro()
+    {
+        $this->_checkAuth();
+        $put_vars = json_decode(file_get_contents('php://input'));
+        
+         $pro = Receipt::model()->find('product_id = "'.$put_vars->productId.'" AND rid=0');
+       
+               
+
+        if(empty($pro)){
+            $this->_sendResponse(500, sprintf("Error: Couldn't delete model <b>%s</b> withs ID <b>%s</b>.","receipt",$put_vars->productId) );
+            exit;
+        }
+        $num = $pro->delete();
+        if($num>0){
+                  $this->_sendResponse(200, sprintf("Model <b>%s</b> with ID <b>%s</b> has been deleted.",'receipt', $pro->id) );
+        }else{
+            $this->_sendResponse(500, sprintf("Error: Couldn't delete model <b>%s</b> with ID <b>%s</b>.","receipt",0) );
+        }
+        
+       
+    } 
+   
 
 
     private function _getStatusCodeMessage($status)
