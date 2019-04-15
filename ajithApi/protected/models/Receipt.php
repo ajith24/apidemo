@@ -11,6 +11,7 @@ class Receipt extends CActiveRecord
 	 * @var integer $product_discount
 	 * @var integer $vat
 	 * @var integer $total_price
+
 	 * @var integer $created_at
 	 * @var integer $updated_at
 	 */
@@ -63,6 +64,7 @@ class Receipt extends CActiveRecord
 			'product_total' => 'product_total',
 			'product_discount' => 'product_discount',
 			'vat' => 'vat',
+			//'status' => 'Status',
 			'total_price' => 'total_price',
 			'created_at' => 'Created',
 			'updated_at' => 'Updated',
