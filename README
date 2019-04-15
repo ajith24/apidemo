@@ -62,3 +62,44 @@ and join discussions with other Yii users.
 
 The Yii Developer Team
 http://www.yiiframework.com
+
+
+API Details:
+------------
+
+Create new Product : 
+--------------------
+                    POST /index.php/api/product HTTP/1.1
+                    Host: youwebsite
+                    username: demo
+                    userpassword: demo
+                    cache-control: no-cache
+                    Postman-Token: 06d33a63-5ad1-4532-9ec9-579a7fa9cc12
+                    Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+                    Content-Disposition: form-data; name="name"
+
+                    iphone
+
+                    Content-Disposition: form-data; name="cost"
+
+                    2500
+
+                    Content-Disposition: form-data; name="vat_class"
+
+                    20
+
+                    Content-Disposition: form-data; name="barcode"
+
+                    234234
+                    ------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+List Product:
+------------
+
+              GET /index.php/api/product HTTP/1.1
+              Host: youwebsite
+              username: demo
+              userpassword: demo
+              cache-control: no-cache
+              Postman-Token: 2915bcd0-8207-4a21-bda6-dfb968c959cf
